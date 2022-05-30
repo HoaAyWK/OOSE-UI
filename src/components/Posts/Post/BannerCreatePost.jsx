@@ -8,7 +8,7 @@ import {
     Typography
 } from '@mui/material';
 
-const BannerCreatePost = () => {
+const BannerCreatePost = ({isClick}) => {
     return (
         <Box
             sx={{
@@ -33,7 +33,7 @@ const BannerCreatePost = () => {
                             <Typography variant='h4' mb={4}>
                                 Wanna Hire a Freelancer
                             </Typography>
-                            <Button variant='outlined' sx={{ p: 3, borderRadius: 5 }}>
+                            <Button variant='outlined' sx={{ p: 3, borderRadius: 5 }} onClick={isClick}>
                                 Create New Post
                             </Button>
                         </Box>

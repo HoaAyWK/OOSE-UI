@@ -1,7 +1,7 @@
 import api from './api';
 import axios from 'axios';
 
-const API_URL = 'https://localhost:7022/api/v1/';
+const API_URL = 'https://open-request-api.herokuapp.com/api/v1/';
 
 const getCategories = () => {
     return axios.get(API_URL + 'Categories/Categories');

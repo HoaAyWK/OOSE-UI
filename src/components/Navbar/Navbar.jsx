@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
     AppBar,
     Avatar,
@@ -34,7 +34,9 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const { user: currentUser } = useSelector((state) => state.auth);
     const { avatar } = useSelector((state) => state.avatar);
-  
+
+    const isAdmin = currentUser?.roles[0] === 'Admin';
+    const navigate = useNavigate();
     const signOut = useCallback(() => {
       dispatch(signout());
     }, [dispatch]);
@@ -44,15 +46,20 @@ const Navbar = () => {
             setShowUserMenu(true);
         } else {
             setShowUserMenu(false);
+            navigate('/');
         }
 
         eventBus.on('signout', () => signOut());
         return () => eventBus.remove('signout');
-    }, [currentUser, signOut]);
+    }, [currentUser, navigate, signOut]);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };   
+
+    const hadleNavigateDashboard = (url = '/dashboard') => {
+        navigate(url);
+    }
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
@@ -128,6 +135,16 @@ const Navbar = () => {
                             {page}
                         </Button>
                         ))}
+                        {isAdmin && (
+                            <Button
+                            size='large'
+                            key='Dashboard'
+                            onClick={() => hadleNavigateDashboard('/admin')}
+                            sx={{ my: 2, color: 'inherit', display: 'block' }}
+                        >
+                            Dashboard
+                        </Button>
+                        )}
                     </Box>
                     <Search sx={{ mr: 2 }}>
                         <SearchIconWrapper>

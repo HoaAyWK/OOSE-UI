@@ -56,7 +56,7 @@ const Post = ({ post }) => {
                 >
                 </Box>
                 <Box component='div' sx={{ position: 'absolute', top: '10px', left: '10px', color: 'white', zIndex: 9 }}>
-                    <Link to={'/users/' + post.author.id}>
+                    <Link to={'/users/' + post.author?.id}>
                         <Box component='div' sx={{ display: 'flex', alignItems: 'center' }}>
                             
                                 {post.author?.featuredAvatar ? (
