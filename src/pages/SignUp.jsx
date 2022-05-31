@@ -16,9 +16,6 @@ import {
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 import { freelancerRegister, customerRegister } from '../slices/auth';
 import { clearMessage } from '../slices/message';
@@ -50,7 +47,6 @@ const SignUp = (props) => {
   const emailEl = useRef();
   const passwordEl = useRef();
   const repeatPasswordEl = useRef();
-  const dateOfBirthEl = useRef();
   const phoneEl = useRef();
   const addressEl = useRef();
   const countryEl = useRef();
@@ -68,7 +64,6 @@ const SignUp = (props) => {
     const password = passwordEl.current.value;
     const repeatPassword = repeatPasswordEl.current.value;
     const phone = phoneEl.current.value;
-    const dateOfBirth = dateOfBirthEl.current.value;
     const address = addressEl.current.value;
     const country = countryEl.current.value;
     const accountType = accountTypeEl.current.value;
@@ -77,7 +72,7 @@ const SignUp = (props) => {
     // Freelancer Register
     if (accountType === accountTypes[0].value) {
       dispatch(freelancerRegister({ email, password, firstName, lastName,
-        phone, dateOfBirth, address, country}))
+        phone, address, country}))
         .unwrap()
         .then(() => {         
           props.history.push('/');
@@ -89,7 +84,7 @@ const SignUp = (props) => {
     }
     else {
       dispatch(customerRegister({ email, password, firstName, lastName,
-        phone, dateOfBirth, address, country}))
+        phone, address, country}))
         .unwrap()
         .then(() => {
           props.history.push('/');
@@ -191,7 +186,7 @@ const SignUp = (props) => {
                 inputRef={repeatPasswordEl}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={12}>
               <TextField 
                 id='phone'
                 name='phone'
@@ -200,18 +195,6 @@ const SignUp = (props) => {
                 fullWidth
                 inputRef={phoneEl}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DesktopDatePicker
-                  label="Date desktop"
-                  inputFormat="MM/dd/yyyy"
-                  value={value}
-                  onChange={handleChange}
-                  inputRef={dateOfBirthEl}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
             </Grid>
             <Grid item xs={12}>
               <TextField 

@@ -3,7 +3,7 @@ import axios from 'axios';
 import api from './api';
 import tokenService from './token.service';
 
-const customerRegister = async (email, password, firstName, lastName, phone, dateOfBirth, address, country) => {
+const customerRegister = async (email, password, firstName, lastName, phone, address, country) => {
     return api
         .post('Accounts/CustomerRegister', {
             email,
@@ -11,7 +11,6 @@ const customerRegister = async (email, password, firstName, lastName, phone, dat
             firstName,
             lastName,
             phone,
-            dateOfBirth,
             address,
             country
         })
@@ -27,9 +26,7 @@ const customerRegister = async (email, password, firstName, lastName, phone, dat
         });
 };
 
-const freelancerRegister = async (email, password, firstName, lastName, phone, dateOfBirth, address, country) => {
-    console.log(typeof(dateOfBirth));
-    console.log(email, password, firstName, lastName, phone, dateOfBirth, address, country);
+const freelancerRegister = async (email, password, firstName, lastName, phone, address, country) => {
     return api
         .post('Accounts/FreelancerRegister', {
             email,
@@ -37,7 +34,6 @@ const freelancerRegister = async (email, password, firstName, lastName, phone, d
             firstName,
             lastName,
             phone,
-            dateOfBirth,
             address,
             country
         })

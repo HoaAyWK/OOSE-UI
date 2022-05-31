@@ -25,12 +25,11 @@ const updateBackground = (userId, filePath) => {
     });
 };
 
-const updateInfo = (userId, firstName, lastName, phone, dateOfBirth, address, country) => {
+const updateInfo = (userId, firstName, lastName, phone, address, country) => {
     return api.put('Users/UpdateUserInfo?id=' + userId , {
         firstName,
         lastName,
         phone,
-        dateOfBirth,
         address,
         country
     });

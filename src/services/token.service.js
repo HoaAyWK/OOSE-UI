@@ -19,7 +19,7 @@ class TokenService {
 
     updateRefreshToken(refreshToken) {
         let user = JSON.parse(localStorage.getItem(key));
-        user.resfreshToken = refreshToken;
+        user.refreshToken = refreshToken;
         localStorage.setItem(key, JSON.stringify(user));
     }
 

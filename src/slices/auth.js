@@ -7,12 +7,12 @@ const user = JSON.parse(localStorage.getItem('authenticated'));
 
 export const customerRegister = createAsyncThunk(
     'auth/customerRegister',
-    async ({ email, password, firstName, lastName, phone, dateOfBirth,
+    async ({ email, password, firstName, lastName, phone,
         address, country }, thunkApi) => {
         try {
             const data = await AuthService
                 .customerRegister(email, password, firstName, lastName,
-                    phone, dateOfBirth, address, country);
+                    phone, address, country);
             thunkApi.dispatch(setMessage(data.message));
             return { user: data };
         } catch (error) {
@@ -26,12 +26,12 @@ export const customerRegister = createAsyncThunk(
 
 export const freelancerRegister = createAsyncThunk(
     'auth/freelancerRegister',
-    async({ email, password, firstName, lastName, phone, dateOfBirth,
+    async({ email, password, firstName, lastName, phone,
         address, country}, thunkApi) => {
         try {
             const data = await AuthService
                 .freelancerRegister(email, password, firstName, lastName,
-                    phone, dateOfBirth, address, country);
+                    phone, address, country);
             thunkApi.dispatch(setMessage(data.message));
             return { user: data };
         } catch (error) {

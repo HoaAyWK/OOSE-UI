@@ -71,17 +71,6 @@ const CardInfo = ({ user }) => {
                                         Phone: {user.phone}
                                     </Typography>
                                 </Box>
-                                <Box 
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center'
-                                    }} 
-                                >
-                                    <CalendarTodayIcon />
-                                    <Typography variant='h6' sx={{ fontWeight: 300 }} ml={1}>
-                                        Birth Date: {user.dateOfBirth}
-                                    </Typography>
-                                </Box>
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <Box 
