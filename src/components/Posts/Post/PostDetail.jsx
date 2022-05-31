@@ -14,17 +14,18 @@ import {
     CardMedia
 } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import UploadFile from './components/UploadFile';
 import ListFreelancerDialog from './ListFreelancerDialog';
 import PostService from '../../../services/post.service';
 
+
 const Input = styled('input')({
     display: 'none'
 });
 
-const PostDetail = ({ post }) => {
+const PostDetail = ({ post, onReload }) => {
     const [showAuthorCard, setshowAuthorCard] = useState(false);
     const [showPostRequests, setShowPostRequests] = useState(false);
     const [selected, setSelected] = useState(0);
@@ -105,6 +106,11 @@ const PostDetail = ({ post }) => {
         setOpen(false);
     };
 
+    const handleSelectFreelancer = () => {
+        setSelectedFreelancer(true);
+        onReload();
+    };
+
     console.log(post);
     return (
         <Container maxWidth='xl'>
@@ -179,11 +185,64 @@ const PostDetail = ({ post }) => {
                             <ListFreelancerDialog 
                                 onClose={handleClose} 
                                 open={open} 
+                                onSelectFreelancer={handleSelectFreelancer}
                                 postId={post.id} 
                                 postRequests={post.postRequests}
                             />
                         </>
                         )} 
+                        {showPostRequests && selectedFreelancer && (
+                            <Box 
+                                sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    bgcolor: 'rgba(234, 245, 251, 0.7)',
+                                    borderRadius: 5,
+                                    mt: 2,
+                                    pb: 2
+                                }}
+                            >
+                                <Typography variant='h6' my={2} align='center'>Freelancer</Typography>
+                                <Box 
+                                    sx={{
+                                        display: 'flex',
+                                        width: '90%',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                            
+                                    }}
+                                >
+                                    <Box 
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                        >
+                                            {post?.freelancer?.featuredAvatar ? (
+                                                <Avatar src={post.author.featuredAvatar} sx={{ width: 50, height: 50 }} /> 
+                                            ) : (
+                                                <Avatar sx={{ width: 50, height: 50 }}>
+                                                    <AccountCircleIcon />
+                                                </Avatar>
+                                            )}
+                                        </Box>
+                                    <Typography variant='body1' ml={2}>
+                                        {post?.freelancer ? `${post.freelancer.firstName} ${post.freelancer.lastName}` : ''}
+                                    </Typography>
+                                    </Box>
+                                    <Button variant='contained' size='small' color='secondary'>Detail</Button>
+                                </Box>
+                            </Box>
+                        )}
                         {!showPostRequests && (
                             <Button
                                 fullWidth

@@ -14,7 +14,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PostService from '../../../services/post.service';
 
 const ListFreelancerDialog = (props) => {
-    const { open, onClose, postRequests, postId } = props;
+    const { open, onClose, postRequests, postId, onSelectFreelancer } = props;
     
     const handleClick = (e) => {
         const freelancerId = e.target.value;
@@ -22,13 +22,15 @@ const ListFreelancerDialog = (props) => {
             .then((res) => {
                 if (res.data.isSuccess) {
                     console.log('select freelancer successful');
+                    onClose();
+                    onSelectFreelancer();
                 }
             }, (err) => {
                 console.log(err.response.data.message);
             });
     };
     return (
-        <Dialog onClose={onClose} open={open} maxWidth='xs'>
+        <Dialog onClose={onClose} open={open} maxWidth='xs' fullWidth>
             <DialogTitle>Select Freelancers</DialogTitle>
             {postRequests ? (
                 <List fullWidth>

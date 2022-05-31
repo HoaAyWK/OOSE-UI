@@ -8,7 +8,9 @@ import PostService from '../services/post.service';
 
 const PostDetails = () => {
     const [post, setPost] = useState();
+    const [reload, setReload] = useState(false);
     let params = useParams();
+
 
     useEffect(() => {
         PostService.getPostById(params.id)
@@ -17,11 +19,15 @@ const PostDetails = () => {
             }, (err) => {
                 console.log(err.response.data.message);
             });
-    }, [params.id]);
+    }, [params.id, reload]);
+
+    const handleReload = () => {
+        setReload(true);
+    };
 
     return (
         <Common>
-            {post ? (<PostDetail post={post} />) : (<div>Not Found</div>)}
+            {post ? (<PostDetail post={post} onReload={handleReload} />) : (<div>Not Found</div>)}
         </Common>
     );
 };
