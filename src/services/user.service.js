@@ -1,7 +1,7 @@
 import axios from "axios";
 import api from './api';
 
-const API_URL='https://locahost:7022/api/v1/Users/';
+const API_URL='https://open-request-api.herokuapp.com/api/v1/Users/';
 
 const getLoggedInUser = () => {
     return api.get('Users/GetLoggedInUserInfo');
@@ -35,12 +35,21 @@ const updateInfo = (userId, firstName, lastName, phone, address, country) => {
     });
 };
 
+const getAllUser = () => {
+    return api.get(API_URL + 'GetAll');
+}
+
+const deleteUser = async (id) => {
+    return api.delete('/Users/DeleteUser?id=' + id);
+}
+
 const UserService = {
     getLoggedInUser,
     getUser,
     updateAvatar,
     updateBackground,
     updateInfo,
+    getAllUser,
 };
 
 export default UserService;

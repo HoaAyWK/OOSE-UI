@@ -13,7 +13,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
-const CollapsedList = ({ icon, label, actions, selected, handleSelected }) => {
+const CollapsedList = ({ icon, label, actions, selected, handleSelected, nameAction }) => {
     const [open, setOpen] = useState(false);
     const handleClick = () => {
         setOpen(!open);
@@ -38,7 +38,7 @@ const CollapsedList = ({ icon, label, actions, selected, handleSelected }) => {
                             key={action.id} 
                             sx={{ pl: 4, borderRadius: 3 }} 
                             selected={selected === action.id}
-                            onClick={(event) => handleSelected(event, action.id)}
+                            onClick={(event) => handleSelected(event, action.id, nameAction)}
                         >
                             <ListItemIcon>
                                 <FiberManualRecordIcon fontSize='small' sx={{ fontSize: 8 }}/>

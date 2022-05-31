@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Box, Container, Grid, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -11,27 +11,22 @@ import CardInfo from '../components/Profile/CardInfo';
 import Posts from '../components/Posts/Posts';
 import CreatePostDialog from '../components/Profile/CreatePostDialog';
 
-import PostService from '../services/post.service';
+import { startGetPostByCustomer } from '../slices/posts/postCreator';
 import UserService from '../services/user.service';
 
 
 const Profile = () => {
     const [openEdit, setOpenEdit] = useState(false);
     const [openCreatePost, setOpenCreatePost] = useState(false);
-    const [posts, setPosts] = useState();
     const [user, setUser] = useState();
     const { isSignedIn, user: currentUser } = useSelector((state) => state.auth);
     const { avatar } = useSelector((state) => state.avatar);
+    const { posts } = useSelector((state) => state.jobs)
+
+    const dispatch = useDispatch()
 
     useEffect(() => {      
-        PostService.getCustomerLoggedInPosts()
-            .then((res) => {
-                if (res.data.isSuccess) {
-                    setPosts(res.data.content);
-                }
-            }, (err) => {
-                console.log(err.response.data.message);
-            });
+        dispatch(startGetPostByCustomer());
         UserService.getLoggedInUser()
             .then((res) => {
                 if (res.data.content) {
@@ -40,7 +35,7 @@ const Profile = () => {
             }, (err) => {
                 console.log(err.response.data.message);
             })
-    }, [currentUser.userId, avatar]);
+    }, [currentUser?.userId, avatar, dispatch]);
 
     const handleClickOpenEdit = () => {
         setOpenEdit(true);
@@ -62,12 +57,8 @@ const Profile = () => {
         setUser(user);
     };
 
-    const onLoadPosts = (posts) => {
-        setPosts(posts);
-    };
-
     if (!isSignedIn) {
-        return <Navigate to='/signin' />;
+        return <Navigate to='/' />;
     }
     return (
         <Common>
@@ -111,7 +102,7 @@ const Profile = () => {
                     <CreatePostDialog 
                         open={openCreatePost} 
                         onClose={handleCloseCreatPost} 
-                        onLoadPosts={onLoadPosts}
+                        // onLoadPosts={onLoadPosts}
                     />
                     {posts ? (
                         <Posts posts={posts} sx={{ my: 4 }} />

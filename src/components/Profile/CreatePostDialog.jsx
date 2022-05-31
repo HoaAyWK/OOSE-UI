@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     Box,
     Button,
@@ -20,14 +20,15 @@ import {
 import FileUpload from '../Dashboard/components/FileUpload';
 import CategoryService from '../../services/category.service';
 import { storeage } from '../../services/firebase';
-import PostService from '../../services/post.service';
+import { startAddPost } from '../../slices/posts/postCreator';
 
 const CreatePostDialog = (props) => {
     const [categories, setCategories] = useState();
     const [selectedCategory, setSelectedCategory] = useState();
     const [selectedFile, setSelectedFile] = useState();
     const { user: currentUser } = useSelector((state) => state.auth);
-    const { open, onClose, onLoadPosts } = props;
+    const { open, onClose } = props;
+    const dispatch = useDispatch();
 
     const titleRef = useRef();
     const descriptionRef = useRef();
@@ -88,28 +89,16 @@ const CreatePostDialog = (props) => {
                 },
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        PostService.createPost(
+                        const post = {
                             title,
                             description,
                             downloadURL,
                             price,
                             duration,
-                            [category]
-                        ).then((res) => {
-                            if (res.data.id) {
-                                PostService.getCustomerLoggedInPosts()
-                                    .then((response) => {
-                                        if (response.data.content) {
-                                            onLoadPosts(response.data.content);
-                                        }
-                                    }, (e) => {
-                                        console.log(e.response.data.message);
-                                    });
-                            }
-                            onClose();
-                        }, (err) => {
-                            console.log(err.response.data.message);
-                        });
+                            category:[category],
+                        };
+                        dispatch(startAddPost(post));
+                        onClose();
                     });
                 }
             );

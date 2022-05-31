@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
     AppBar,
     Avatar,
@@ -22,7 +22,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Search, SearchIconWrapper, StyledInputBase } from '../../styles/Search';
 import eventBus from '../../common/EventBus';
 import { signout } from '../../slices/auth';
-import UserService from '../../services/user.service';
 
 const pages = ['Categories', 'Posts', 'Newest'];
 
@@ -34,7 +33,9 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const { user: currentUser } = useSelector((state) => state.auth);
     const { avatar } = useSelector((state) => state.avatar);
-  
+
+    const isAdmin = currentUser?.roles[0] === 'Admin';
+    const navigate = useNavigate();
     const signOut = useCallback(() => {
       dispatch(signout());
     }, [dispatch]);
@@ -44,15 +45,20 @@ const Navbar = () => {
             setShowUserMenu(true);
         } else {
             setShowUserMenu(false);
+            // navigate('/');
         }
 
         eventBus.on('signout', () => signOut());
         return () => eventBus.remove('signout');
-    }, [currentUser, signOut]);
+    }, [currentUser, navigate, signOut]);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };   
+
+    const hadleNavigateDashboard = (url = '/dashboard') => {
+        navigate(url);
+    }
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
@@ -119,15 +125,27 @@ const Navbar = () => {
                     </Box>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
-                        <Button
+                        <Link to={`/${page}`}>
+                            <Button
                             size='large'
                             key={page}
                             onClick={handleCloseNavMenu}
                             sx={{ my: 2, color: 'inherit', display: 'block' }}
                         >
                             {page}
-                        </Button>
+                            </Button>
+                        </Link> 
                         ))}
+                        {isAdmin && (
+                            <Button
+                            size='large'
+                            key='Dashboard'
+                            onClick={() => hadleNavigateDashboard('/dashboard')}
+                            sx={{ my: 2, color: 'inherit', display: 'block' }}
+                        >
+                            Dashboard
+                        </Button>
+                        )}
                     </Box>
                     <Search sx={{ mr: 2 }}>
                         <SearchIconWrapper>
