@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Avatar,
     Box,
@@ -14,98 +14,12 @@ import {
     
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useDispatch, useSelector } from 'react-redux';
+import { startSetAllUser } from '../../slices/users/userCreator';
   
-const rows = [
-        { lastName: 'Snow', firstName: 'Jon', email: 'a@gmail.com', phone: '0987654321', role: 'Customer' },
-        { lastName: 'Lannister', firstName: 'Cersei', email: 'a@gmail.com', phone: '0987654321', role: 'Customer' },
-        { lastName: 'Lannister', firstName: 'Jaime',  email: 'a@gmail.com', phone: '0987654321', role: 'Customer' },
-        { lastName: 'Stark', firstName: 'Arya', email: 'a@gmail.com', phone: '0987654321', role: 'Customer' },
-        { lastName: 'Targaryen', firstName: 'Daenerys', email: 'a@gmail.com', phone: '0987654321', role: 'Customer' },
-        { lastName: 'Melisandre', firstName: null, email: 'a@gmail.com', phone: '0987654321', role: 'Customer' },
-        { lastName: 'Clifford', firstName: 'Ferrara', email: 'a@gmail.com', phone: '0987654321', role: 'Customer'  },
-        { lastName: 'Frances', firstName: 'Rossini', email: 'a@gmail.com', phone: '0987654321', role: 'Customer' },
-        { lastName: 'Roxie', firstName: 'Harvey', email: 'a@gmail.com', phone: '0987654321', role: 'Customer'  },
-];
-
 const headers = [
-    'Name', 'Email', 'Phone', 'Role'
+    'Name', 'Email', 'Phone', 'Status'
 ];
-
-
-// const UsersTable = () => {
-//     const [page, setPage] = React.useState(2);
-//     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-//     const handleChangePage = (event, newPage) => {
-//         setPage(newPage);
-//     };
-
-//     const handleChangeRowsPerPage = (event) => {
-//         setRowsPerPage(parseInt(event.target.value, 10));
-//         setPage(0);
-//     };
-//     return (
-//         <TableContainer
-//             component={Paper}
-//         >
-//             <Table sx={{ minWidth: 650 }}>
-//                 <TableHead sx={{ bgcolor: 'primary.dark' }} >
-//                     <TableRow>
-//                         {headers.map((header) => (
-//                             <TableCell key={header}>
-//                                 <Typography variant='h6'>
-//                                     {header}
-//                                 </Typography>
-//                             </TableCell>
-//                         ))}
-//                     </TableRow>
-//                 </TableHead>
-//                 <TableBody>
-//                     {rows.map((row, index) => (
-//                         <TableRow
-//                             key={index}
-//                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-//                         >
-//                             <TableCell component='th' scope='row'>
-//                                 <Typography variant='body1'>
-//                                     {row.firstName}
-//                                 </Typography>                               
-//                             </TableCell>
-//                             <TableCell>
-//                                 <Typography variant='body1'>
-//                                     {row.lastName}
-//                                 </Typography>
-//                             </TableCell>
-//                             <TableCell>
-//                                 <Typography variant='body1'>
-//                                     {row.email}
-//                                 </Typography>                                
-//                             </TableCell>
-//                             <TableCell>
-//                                 <Typography variant='body1'>
-//                                     {row.phone}
-//                                 </Typography>
-//                             </TableCell>
-//                             <TableCell>
-//                                 <Typography variant='body1'>
-//                                     {row.role}
-//                                 </Typography>
-//                             </TableCell>
-//                         </TableRow>
-//                     ))}
-//                 </TableBody>
-//             </Table>
-//             <TablePagination
-//                     component='div'
-//                     count={100}
-//                     page={page}
-//                     onPageChange={handleChangePage}
-//                     rowsPerPage={rowsPerPage}
-//                     onRowsPerPageChange={handleChangeRowsPerPage}
-//                 />
-//         </TableContainer>
-//     );
-// };
 
 const UsersTable = () => {
     const [order, setOrder] = useState('arc');
@@ -113,6 +27,12 @@ const UsersTable = () => {
     const [selected, setSelected] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const { users } = useSelector((state) => state.users);
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(startSetAllUser());
+    }, [dispatch])
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -122,7 +42,7 @@ const UsersTable = () => {
 
     const handleSelectedClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.name);
+            const newSelecteds = users.map((n) => n.name);
             setSelected(newSelecteds);
             return;
         }
@@ -160,7 +80,7 @@ const UsersTable = () => {
     const isSelected = name => selected.indexOf(name) !== -1;
 
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -181,7 +101,7 @@ const UsersTable = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            {users?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => (
                                     <TableRow
                                         key={index}
@@ -205,11 +125,6 @@ const UsersTable = () => {
                                                 {row.phone}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell size='medium'>
-                                            <Typography variant='body1'>
-                                                {row.role}
-                                            </Typography>
-                                        </TableCell>
                                     </TableRow>
                             ))}
                             {emptyRows > 0 && (
@@ -222,7 +137,7 @@ const UsersTable = () => {
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={rows.length}
+                        count={users?.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}

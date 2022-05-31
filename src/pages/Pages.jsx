@@ -11,7 +11,7 @@ import Users from '../components/Dashboard/components/Users';
 import UserForm from '../components/Dashboard/components/UserForm';
 import PostDetails from './PostDetails';
 import Profile from './Profile';
-import Admin from './Admin';
+import AllPost from './AllPost'
 
 
 const Pages = () => {
@@ -29,7 +29,7 @@ const Pages = () => {
         </Route>
         <Route path='/posts/:id' element={<PostDetails />} />
         <Route path='/profile' element={<Profile />} />
-        <Route path='/admin' element={<Admin />} />
+        <Route path='/posts' element={<AllPost />} />
     </Routes>
   );
 }

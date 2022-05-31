@@ -56,7 +56,7 @@ const PostDetail = ({ post }) => {
                     setColor('warning');
                 }
             }
-            if (post.freelancerId === currentUser.userId) {
+            if (post.freelancerId === currentUser?.userId) {
                 setSelected(2);
                 setProcessing(true);
             }

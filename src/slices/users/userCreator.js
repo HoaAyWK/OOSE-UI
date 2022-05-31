@@ -42,24 +42,18 @@ const setUser = (payload) => {
 }
 
 const startSetAllUser = () => {
-    return (dispatch) => {
-        dispatch(isLoading(true));
-
-        UserService.getAllUser()
-        .then((response) => {
-            if (response.status !== 200){
-                throw Error(response.statusText);
+    return async (dispatch) => {
+        try {
+            dispatch(isLoading(true));
+            const res = await UserService.getAllUser();
+            if (res.data.content) {
+                dispatch(isLoading(false));
+                dispatch(setUser(res.data.content));
             }
-
-            dispatch(isLoading(false));
-            return response.data.content;
-        })
-        .then((response) => {
-            dispatch(setUser(response));
-        })
-        .catch(() => {
+        } catch (error) {
             dispatch(isError(true));
-        })
+            throw new Error(error.response);
+        }
     }
 }
 

@@ -22,7 +22,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Search, SearchIconWrapper, StyledInputBase } from '../../styles/Search';
 import eventBus from '../../common/EventBus';
 import { signout } from '../../slices/auth';
-import UserService from '../../services/user.service';
 
 const pages = ['Categories', 'Posts', 'Newest'];
 
@@ -46,7 +45,7 @@ const Navbar = () => {
             setShowUserMenu(true);
         } else {
             setShowUserMenu(false);
-            navigate('/');
+            // navigate('/');
         }
 
         eventBus.on('signout', () => signOut());
@@ -126,20 +125,22 @@ const Navbar = () => {
                     </Box>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
-                        <Button
+                        <Link to={`/${page}`}>
+                            <Button
                             size='large'
                             key={page}
                             onClick={handleCloseNavMenu}
                             sx={{ my: 2, color: 'inherit', display: 'block' }}
                         >
                             {page}
-                        </Button>
+                            </Button>
+                        </Link> 
                         ))}
                         {isAdmin && (
                             <Button
                             size='large'
                             key='Dashboard'
-                            onClick={() => hadleNavigateDashboard('/admin')}
+                            onClick={() => hadleNavigateDashboard('/dashboard')}
                             sx={{ my: 2, color: 'inherit', display: 'block' }}
                         >
                             Dashboard

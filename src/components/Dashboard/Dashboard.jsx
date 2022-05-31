@@ -15,6 +15,7 @@ import {
     Typography,
     Toolbar
 } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -26,6 +27,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import { Topbar } from '../Topbar/Topbar';
 import { Sidebar } from '../Sidebar/Sidebar';
 import CollapsedList from '../CollapsedList';
+import FeaturedInfo from './components/FeatureInfo';
 
 const posts = [
     {id: 1, title: 'Develop Blog Website', description: 'I want a Blog website', price: 12.0, featuredImage: 'https://images.unsplash.com/photo-1457305237443-44c3d5a30b89?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80'},
@@ -37,7 +39,6 @@ const posts = [
   ];
 
 const userActions = [
-    { 'id': 31, 'name': 'Profile'},
     { 'id': 32, 'name': 'List'},
     { 'id': 33, 'name': 'Create'},
     { 'id': 34, 'name': 'Edit'},
@@ -64,13 +65,20 @@ const postActions = [
 const Dashboard = () => {
     const [open, setOpen] = useState(true);
     const [selected, setSelected] = useState(0);
-
+    const navigate = useNavigate();
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
-    const handleListItemClick = (event, index) => {
+    let link = '';
+
+    const handleListItemClick = (event, index, name) => {
         setSelected(index);
+        if (name === 'userActions') {
+            const user = userActions.find((item) => item.id === index);
+            link = user.name === 'List' ? 'users' : '';
+        }
+        navigate(`/dashboard/${link}`);
     } 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -159,6 +167,7 @@ const Dashboard = () => {
                         <CollapsedList
                             selected={selected}
                             handleSelected={handleListItemClick}
+                            nameAction='userActions'
                             actions={userActions}
                             icon={<PersonIcon />}
                             label='User'
@@ -167,6 +176,7 @@ const Dashboard = () => {
                             selected={selected}
                             handleSelected={handleListItemClick}
                             actions={categoryActions}
+                            nameAction='categoryActions'
                             icon={<CategoryIcon />}
                             label='Category'
                         />
@@ -174,6 +184,7 @@ const Dashboard = () => {
                             selected={selected}
                             handleSelected={handleListItemClick}
                             actions={postActions}
+                            nameAction='postActions'
                             icon={<ArticleIcon />}
                             label='Post'
                         />
@@ -184,6 +195,7 @@ const Dashboard = () => {
             </Sidebar>
             <Container maxWidth="xl" sx={{ mt: 8, mb: 4 }}>
                 <Outlet />
+                <FeaturedInfo />
             </Container>
         </Box>
     );
